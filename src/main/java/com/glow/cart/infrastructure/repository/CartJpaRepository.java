@@ -30,6 +30,6 @@ public class CartJpaRepository implements PanacheRepositoryBase<CartJpaEntity, S
     }
 
     public Optional<CartJpaEntity> findByUserId(String userId) {
-        return find("user_id", userId).firstResultOptional();
+        return find("userId", userId).firstResultOptional();
     }
 }
