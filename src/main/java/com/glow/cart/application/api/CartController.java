@@ -3,8 +3,12 @@ package com.glow.cart.application.api;
 import com.glow.cart.application.api.model.*;
 import com.glow.cart.application.model.CartDto;
 import com.glow.cart.application.services.CartService;
+
+import io.quarkus.security.Authenticated;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.reactive.RestResponse;
 
 @Path("/carts")
@@ -13,9 +17,11 @@ import org.jboss.resteasy.reactive.RestResponse;
 public class CartController {
 
     private final CartService service;
+    private final JsonWebToken jwt;
 
-    public CartController(CartService service) {
+    public CartController(CartService service, JsonWebToken jwt) {
         this.service = service;
+        this.jwt = jwt;
     }
 
     // ========== CREATE CART ==========
@@ -32,6 +38,16 @@ public class CartController {
     @Path("/{id}")
     public RestResponse<CartResponse> getCartById(@PathParam("id") String id) {
         CartDto cartDto = service.findById(id);
+        return RestResponse.ok(mapToResponse(cartDto));
+    }
+
+    // ========== GET OR CREATE MY CART ==========
+
+    @GET
+    @Path("/me")
+    @Authenticated
+    public RestResponse<CartResponse> getOrCreateMyCart() {
+        CartDto cartDto = service.getOrCreateCart(jwt.getSubject());
         return RestResponse.ok(mapToResponse(cartDto));
     }
 
@@ -72,6 +88,14 @@ public class CartController {
         );
         CartDto cartDto = service.updateCart(clearedCart);
         return RestResponse.ok(mapToResponse(cartDto));
+    }
+
+    @DELETE
+    @Path("/me")
+    @Authenticated
+    public RestResponse<Void> clearMyCart() {
+        service.clearCart(jwt.getSubject());
+        return RestResponse.noContent();
     }
 
     // ========== Helper method ==========

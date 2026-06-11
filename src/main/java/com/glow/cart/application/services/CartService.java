@@ -1,5 +1,8 @@
 package com.glow.cart.application.services;
 
+import java.time.Instant;
+import java.util.List;
+
 import com.glow.cart.application.mappers.CartDtoMapper;
 import com.glow.cart.application.model.CartDto;
 import com.glow.cart.domain.model.Cart;
@@ -24,6 +27,23 @@ public class CartService {
 
         cartRepository.save(cart);
         return mapper.toDto(cart);
+    }
+
+    public CartDto getOrCreateCart(String keycloakSubject) {
+        return cartRepository.findByUserId(keycloakSubject)
+            .map(mapper::toDto)
+            .orElseGet(() -> createCart(keycloakSubject));
+    }
+
+    public void clearCart(String keycloakSubject) {
+        cartRepository.findByUserId(keycloakSubject).ifPresent(cart -> {
+            var cleared = cart.toBuilder()
+                .totalPrice(0)
+                .items(List.of())
+                .updatedAt(Instant.now())
+                .build();
+            cartRepository.update(cleared);
+        });
     }
 
     public CartDto findById(String id) {
