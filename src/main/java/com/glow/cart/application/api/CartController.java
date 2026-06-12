@@ -2,10 +2,12 @@ package com.glow.cart.application.api;
 
 import com.glow.cart.application.api.model.*;
 import com.glow.cart.application.model.CartDto;
+import com.glow.cart.application.api.model.AddCartItemRequest;
 import com.glow.cart.application.services.CartService;
 
 import io.quarkus.security.Authenticated;
 import jakarta.ws.rs.*;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.core.MediaType;
 
 import org.eclipse.microprofile.jwt.JsonWebToken;
@@ -87,6 +89,14 @@ public class CartController {
             java.util.List.of()
         );
         CartDto cartDto = service.updateCart(clearedCart);
+        return RestResponse.ok(mapToResponse(cartDto));
+    }
+
+    @POST
+    @Path("/me/items")
+    @Authenticated
+    public RestResponse<CartResponse> addItemToMyCart(@Valid AddCartItemRequest request) {
+        CartDto cartDto = service.addItemToCart(jwt.getSubject(), request);
         return RestResponse.ok(mapToResponse(cartDto));
     }
 

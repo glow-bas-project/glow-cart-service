@@ -16,3 +16,6 @@ CREATE TABLE IF NOT EXISTS cart_items (
     item_price INTEGER NOT NULL,
     FOREIGN KEY (cart_id) REFERENCES carts(id) ON DELETE CASCADE
 );
+
+--changeset sarh:12_06_2026-3
+ALTER TABLE cart_items ADD COLUMN item_name VARCHAR(255) NOT NULL;

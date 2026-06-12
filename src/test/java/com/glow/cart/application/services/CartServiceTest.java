@@ -40,7 +40,7 @@ public class CartServiceTest {
         var userId = "user123";
         when(mapper.toDto(any(Cart.class))).thenAnswer(invocation -> {
             Cart c = invocation.getArgument(0);
-            var item = new CartItemDto("item-1", c.getId().toString(), "menu-1", 1, 100);
+            var item = new CartItemDto("item-1", c.getId().toString(), "menu-1", "menu-item-2-name", 1, 100);
             return new CartDto(
                 c.getId().toString(),
                 c.getUserId(),
@@ -78,7 +78,7 @@ public class CartServiceTest {
             cart.getId().toString(),
             cart.getUserId(),
             cart.getTotalPrice(),
-            List.of(new CartItemDto("item-1", cart.getId().toString(), "menu-1", 1, 100)));
+            List.of(new CartItemDto("item-1", cart.getId().toString(), "menu-1", "menu-item-2-name", 1, 100)));
         when(cartRepository.findById(expected.id())).thenReturn(Optional.of(cart));
         when(mapper.toDto(cart)).thenReturn(expected);
 
@@ -110,7 +110,7 @@ public class CartServiceTest {
             cart.getId().toString(),
             cart.getUserId(),
             cart.getTotalPrice(),
-            List.of(new CartItemDto("item-1", cart.getId().toString(), "menu-1", 1, 100)));
+            List.of(new CartItemDto("item-1", cart.getId().toString(), "menu-1", "menu-item-2-name", 1, 100)));
         when(cartRepository.findByUserId(userId)).thenReturn(Optional.of(cart));
         when(mapper.toDto(cart)).thenReturn(expected);
 
