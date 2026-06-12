@@ -10,6 +10,9 @@ public class CartItemJpaEntity {
     @Column(name = "menu_item_id")
     private String menuItemId;
 
+    @Column(name = "item_name")
+    private String name;
+
     @Column(name = "item_quantity")
     private Integer quantity;
 
@@ -19,8 +22,9 @@ public class CartItemJpaEntity {
     public CartItemJpaEntity() {
     }
 
-    public CartItemJpaEntity(String menuItemId, Integer quantity, Integer price) {
+    public CartItemJpaEntity(String menuItemId, String name, Integer quantity, Integer price) {
         this.menuItemId = menuItemId;
+        this.name = name;
         this.quantity = quantity;
         this.price = price;
     }
@@ -47,5 +51,13 @@ public class CartItemJpaEntity {
 
     public void setPrice(Integer price) {
         this.price = price;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

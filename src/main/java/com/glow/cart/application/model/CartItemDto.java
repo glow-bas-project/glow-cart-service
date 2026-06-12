@@ -6,6 +6,7 @@ public record CartItemDto(
     String id,
     String cartId,
     String menuItemId,
+    String name,
     Integer quantity,
     Integer price
 ) {}
