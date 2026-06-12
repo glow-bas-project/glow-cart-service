@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'io.quarkus'
-    // id 'com.glow.local-env' apply false
+    id 'com.glow.local-env' apply false
 }
 
 if (!System.getenv('CI')) {
